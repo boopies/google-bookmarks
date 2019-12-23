@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css'
-import SearchTerms from "./SearchTerms"
 import SearchResults from './SearchResults'
+import SearchTerms from './SearchBox'
 
 
 class App extends React.Component {
@@ -10,31 +10,33 @@ class App extends React.Component {
 
       this.state = {
           bookVolume: [],
-          searchTerm: 'harry potter',
+          searchTerm: '',
           filterPrint: '',
           filterBook: '',
           };
+
+          this.search= this.search.bind(this);
+          this.handleChange = this.handleChange.bind(this);
+          this.handleKeyPress = this.handleKeyPress.bind(this);      
         }
 
-        handleSearchSubmit = ( searchSubmitEvent, searchInput ) => {
-          searchSubmitEvent.preventDefault();
-          this.setState({
-            searchTerm: searchInput
-          });
-
+        handleKeyPress(event) {
+          if (event.key === "Enter") this.search();
+        }
+      
+        search() {
           const url = "https://www.googleapis.com/books/v1/volumes?"
           const key = "&key=AIzaSyBdqeQ6Vk5PKWXB98W7olUGvozwBI9VcS0"
-
-          const search = this.formatQuery( url, searchInput, key );
-
-          fetch( search )
-            .then(response => {
-              if(!response.ok) {
-                throw new Error('Something went wrong on the network. Please try again later.');
+          const formattedURL = url+ 'q=' + this.state.searchTerm + key
+          
+          fetch(formattedURL)
+            .then(res => {
+              if(!res.ok) {
+                throw new Error('Something went wrong, please try again later.');
               }
-              return response;
+              return res;
             })
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
               const bookVolume = data.items;
               this.setState({
@@ -42,60 +44,51 @@ class App extends React.Component {
                 error: null
               });
             })
-            .catch(error => {
+            .catch(err => {
               this.setState({
-                error: error.message
+                error: err.message
               });
             });
-        };
-
-
-        formatQuery = ( url, searchTerm, key ) => {
-          const { filterBook, filterPrint } = this.state;
-          let formattedQuery;
-          if ( searchTerm !== '') {
-            formattedQuery = '?q=' + searchTerm; 
-          }
-          if ( filterBook !== '') {
-            formattedQuery = formattedQuery + '&filter=' + filterBook;
-          }
-          if ( filterPrint !== '') {
-            formattedQuery = formattedQuery + '&bookType=' + filterPrint;
-          }
-          const formattedUrl  = url + formattedQuery + '&key=' + key; 
-          console.log('formatted URL: ', formattedUrl);   
-          return formattedUrl;    
-        };
-
-        handlePrintType = ( printTypeFormEvent ) => {
-          if ( printTypeFormEvent ) {
-            this.setState({
-                filterPrint: printTypeFormEvent
-            });
-          } 
-        };
       
-        handleBookType = ( bookTypeFormEvent ) => {
-          if ( bookTypeFormEvent ) {
-            this.setState({
-                filterBook: bookTypeFormEvent
-            });
-          } 
-        };
+        }
+
+        handleChange(event) {
+          this.setState({
+            searchTerm: event.target.value
+          });
+        }
+        
+        handlePrintFilter(event) {
+          this.setState({
+            searchTerm: event.target.value
+          });
+        }
+        
+        handleBookFilter(event) {
+          this.setState({
+            searchTerm: event.target.value
+          });
+        }
       
 
   render(){
   const searchPage = <SearchResults bookVolume={this.state.bookVolume} />
+
   return (
     <>
       <header>
         <h1>Google Book Search</h1>
       </header>
       <main className='App'>
-      <SearchTerms 
-          handleSearchSubmit={ this.handleSearchSubmit }
-          handlePrintType={ this.handlePrintType }
-          handleBookType={ this.handleBookType } />
+      <div>
+        <SearchTerms 
+          handleSearch={this.search}
+          handleChange={(event)=>this.handleChange(event)}
+          handleKeyPress={(event) => this.handleKeyPress(event)}
+          handlePrintFilter={(event)=>this.handlePrintFilter(event)}
+          handleBookFilter={(event)=>this.handleBookFilter(event)}
+        />
+        </div>
       {searchPage}
       </main>
     </>

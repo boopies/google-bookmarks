@@ -10,37 +10,8 @@ h1 {
     color: white;
 }
 
-.SearchBar {
-    font-size: 1.2em;
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
-    width: 100%;
-}
 
 img{
     height: 300px;
 }
 
-.SearchBar__Controls {
-    width: 100%;
-}
-
-.SearchBar__input {
-    width: 100%;
-    background-color: lightgrey;
-}
-
-.filter_categories {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    background-color: darkgrey;
-}
-
-.filter01,
-.filter02 {
-    display: flex;
-    flex-direction: row;
-}

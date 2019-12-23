@@ -5,14 +5,14 @@ import FilterOptionsType from './FilterOptionsType'
 class FilterOptions extends React.Component{
     render(){
         return (
-            <div className='filter_categories'>
+            <>
                 <FilterOptionsPrint 
-                    handlePrintType={ this.handlePrintType }
+                    handlePrintFilter={this.props.handlePrintFilter}
                 />
                 <FilterOptionsType 
-                    handleBookType={ this.handleBookType }
+                    handleBookFilter={this.props.handleBookFilter}
                 />
-            </div>
+            </>
         )
 }
 }

@@ -5,20 +5,21 @@ import FilterOptions from './FilterOptions'
 class SearchTerms extends React.Component{
     render(){
         return (
+          <>
             <div className="SearchBar">
-            <div className="SearchBar__controls">
               <SearchBox 
-                handleSearchSubmit={ this.handleSearchSubmit }
+                handleSearch={this.props.handleSearch}
+                handleChange={this.props.handleChange}
+                handleKeyPress={this.props.handleKeyPress}
               />
               <FilterOptions 
-                handlePrintType={ this.handlePrintType }
-                handleBookType={ this.handleBookType }
+                handlePrintFilter={this.props.handlePrintFilter}
+                handleBookFilter={this.props.handleBookFilter}
               />
-            </div>
           </div>
+        </>
         )
     }
 }
-
 
 export default SearchTerms

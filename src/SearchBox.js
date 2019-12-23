@@ -1,35 +1,25 @@
 import React from 'react';
 
 class SearchBox extends React.Component{
-   
-    state = {
-        searchTerm: ''
-    }
 
-    handleSearchInput = ( searchInput ) => {
-        this.setState({
-          searchTerm: searchInput.target.value
-        });
-    }
     render(){
-
-        const { handleSearchSubmit } = this.props;
-        const { searchTerm } = this.state;
-
         return (
-            <div className="SearchBox">
-                    <form 
-                        className="searchbar_form"
-                        onSubmit={ submitEvent => handleSearchSubmit(submitEvent, searchTerm) }>
-                        <input 
-                            className="searchbar_input" 
-                            type="text" 
-                            placeholder="Search Books ... " 
-                            name="search" 
-                            onChange={ this.handleSearchInput } />
-                        <button type="submit">Submit</button>
-                    </form>
-          </div>   
+            <>
+            <form onSubmit={event =>{
+                event.preventDefault();
+                this.props.handleSearch();
+            }}
+                >
+              <input
+                type="text"
+                placeholder="Search for a book"
+                value={this.props.searchTerm}
+                onChange={e => this.props.handleChange(e)}
+                onKeyPress={e => this.props.handleKeyPress(e)}
+              />
+              <input type="submit" value="Search" />
+            </form>
+          </>   
           )
     }
 }
